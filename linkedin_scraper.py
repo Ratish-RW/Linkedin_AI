@@ -11,7 +11,7 @@ import json
 class LinkedInScraper:
     def __init__(self,url:str,feed: str,total: int,cookie_file: str = "cookie.json"):
         self.url = url
-        self.cookie_file = cookie_file
+        self.cookies = cookie_file
         self.options = uc.ChromeOptions()
         self.options.add_argument("--headless=new")  
         self.options.add_argument("--disable-gpu")    
@@ -29,9 +29,7 @@ class LinkedInScraper:
         self.driver.get(self.url)
         time.sleep(2)
         try:
-            with open(self.cookie_file, "r") as f:
-                cookies = json.load(f)
-            for cookie in cookies:
+            for cookie in self.cookies:
                 cookie.pop("sameSite", None) 
                 try:
                     self.driver.add_cookie(cookie)
@@ -194,7 +192,7 @@ class LinkedInScraper:
             # df = pd.DataFrame(self.profiles)
             # df.to_csv("ai_data2.csv",index=False,encoding="utf-8")
             #print("CSV file saved successfully")
-            return {"status":"success","message":{self.profiles}}
+            return {"status":"success","message":self.profiles}
         except Exception:
             #print("Error in getting data")
             return {"status":"failure","error":f"error in getting data\n{str(Exception)}"}

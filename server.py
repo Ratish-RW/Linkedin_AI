@@ -1,6 +1,11 @@
 from flask import Flask,request,jsonify,Response
 from flask_cors import CORS
 from linkedin_scraper import LinkedInScraper
+from dotenv import load_dotenv
+import os
+import json
+
+load_dotenv() 
 
 app = Flask(__name__)
 CORS(app)
@@ -16,7 +21,9 @@ def scrape_data():
         url = data.get("url")
         feed = data.get("feed")
         total = data.get("total")
-        cookie_file = data.get("cookie_file")
+        cookie_str = os.environ.get("COOKIE_JSON")
+        cookie_file = json.loads(cookie_str)
+        #cookie_file = data.get("cookie_file")
 
         scraper = LinkedInScraper(url,feed,total,cookie_file)
         
@@ -35,12 +42,12 @@ def scrape_data():
                         get_data_result = scraper.get_data()
                         if get_data_result.get("status") == 'success':
                             print(get_data_result.get("message"))
-                            scraper.close()
                             return jsonify({"status":"success","message":get_data_result.get("message")})
                         return jsonify({"status":"failure","message":click_date_posted_result.get("message")})
                     return jsonify({"status":"failure","message":search_by_posts_result.get("message")})
                 return jsonify({"status":"failure","message":search_feed_result.get("message")})    
             return jsonify({"status":"failure","message": load_result.get("message")})
+        scraper.close()
 
     except Exception:
         return jsonify({"status":"failure","message":str(Exception)})

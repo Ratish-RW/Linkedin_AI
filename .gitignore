@@ -1,3 +1,6 @@
 /venv/
 /__pycache__/
 cookie.json
+test.py
+cookie_single_line.txt
+.env
