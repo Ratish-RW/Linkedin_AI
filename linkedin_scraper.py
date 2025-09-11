@@ -13,10 +13,12 @@ class LinkedInScraper:
         self.url = url
         self.cookies = cookie_file
         self.options = uc.ChromeOptions()
-        self.options.add_argument("--headless=new")  
-        self.options.add_argument("--disable-gpu")    
-        self.options.add_argument("--no-sandbox")    
+        self.options.add_argument("--headless=new")
+        self.options.add_argument("--no-sandbox")
         self.options.add_argument("--disable-dev-shm-usage")
+        self.options.add_argument("--disable-gpu")
+        self.options.add_argument("--disable-software-rasterizer")
+        self.options.add_argument("--single-process")
         self.driver = uc.Chrome(options=self.options)
         self.wait = WebDriverWait(self.driver,30)
         self.feed = feed

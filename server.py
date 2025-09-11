@@ -21,7 +21,7 @@ def scrape_data():
         url = data.get("url")
         feed = data.get("feed")
         total = data.get("total")
-        print(url,feed,total)
+        #print(url,feed,total)
         cookie_str = os.environ.get("COOKIE_JSON")
         cookie_file = json.loads(cookie_str)
         #cookie_file = data.get("cookie_file")
