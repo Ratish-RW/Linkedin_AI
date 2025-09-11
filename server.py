@@ -41,7 +41,7 @@ def scrape_data():
                         print(click_date_posted_result.get("message"))
                         get_data_result = scraper.get_data()
                         if get_data_result.get("status") == 'success':
-                            print(get_data_result.get("message"))
+                            #print(get_data_result.get("message"))
                             return jsonify({"status":"success","message":get_data_result.get("message")})
                         return jsonify({"status":"failure","message":click_date_posted_result.get("message")})
                     return jsonify({"status":"failure","message":search_by_posts_result.get("message")})

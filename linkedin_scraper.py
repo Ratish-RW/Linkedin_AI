@@ -26,7 +26,7 @@ class LinkedInScraper:
 
 
     def load(self):
-        print("In Load")
+        #print("In Load")
         self.driver.get(self.url)
         time.sleep(2)
         try:
