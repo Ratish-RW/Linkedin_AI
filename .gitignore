@@ -1,6 +1,6 @@
 /venv/
 /__pycache__/
-/cookie.json/
-/scrape_profile.py/
-/scrape_signin.py/
-/scrape.py/
+cookie.json
+scrape_profile.py
+scrape_signin.py
+scrape.py
