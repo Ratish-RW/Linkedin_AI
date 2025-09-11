@@ -10,7 +10,6 @@ import json
 
 class LinkedInScraper:
     def __init__(self,url:str,feed: str,total: int,cookie_file: str):
-        print("Inside scraper")
         self.url = url
         self.cookies = cookie_file
         self.options = uc.ChromeOptions()
