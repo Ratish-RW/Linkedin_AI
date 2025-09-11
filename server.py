@@ -28,7 +28,7 @@ def scrape_data():
         #cookie_file = data.get("cookie_file")
 
         scraper = LinkedInScraper(url,feed,total,cookie_file)
-        
+        print("Outside scraper")
         load_result = scraper.load()
         if load_result.get("status") == "success":
             print(load_result.get("message"))
