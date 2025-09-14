@@ -4,6 +4,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
 import pandas as pd
 import time
 import json
@@ -13,12 +16,10 @@ class LinkedInScraper:
         self.url = url
         self.cookies = cookie_file
         self.options = uc.ChromeOptions()
-        self.options.add_argument("--headless=new")
+        self.options.headless = True 
         self.options.add_argument("--no-sandbox")
         self.options.add_argument("--disable-dev-shm-usage")
-        self.options.add_argument("--disable-gpu")
-        self.options.add_argument("--disable-software-rasterizer")
-        self.options.add_argument("--single-process")
+
         self.driver = uc.Chrome(options=self.options)
         self.wait = WebDriverWait(self.driver,30)
         self.feed = feed
