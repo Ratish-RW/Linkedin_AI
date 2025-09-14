@@ -1,10 +1,14 @@
 from celery import Celery
 from linkedin_scraper import LinkedInScraper
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 celery = Celery(
     "tasks",
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0"
+    broker=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+    backend=os.getenv("REDIS_URL", "redis://localhost:6379/0")
 )
 
 @celery.task(bind=True)
