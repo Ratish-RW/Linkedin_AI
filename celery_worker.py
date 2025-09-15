@@ -7,9 +7,11 @@ load_dotenv()
 
 celery = Celery(
     "tasks",
-    broker=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
-    backend=os.getenv("REDIS_URL", "redis://localhost:6379/0")
-)
+    broker=os.environ.get("REDIS_URL"),
+    backend=os.environ.get("REDIS_URL")
+    )
+
+
 
 @celery.task(bind=True)
 def scrape_task(self, url, feed, total, cookie_file):
