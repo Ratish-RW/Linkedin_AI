@@ -56,8 +56,8 @@ def scrape_data():
         #     return jsonify({"status":"failure","message": load_result.get("message")})
         # scraper.close()
 
-    except Exception:
-        return jsonify({"status":"failure","message":str(Exception)})
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)})
 
 @app.route("/status/<task_id>")
 def status(task_id):
