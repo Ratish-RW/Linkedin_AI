@@ -29,32 +29,6 @@ def scrape_data():
 
         task = scrape_task.delay(url, feed, total, cookie_file)
         return jsonify({"task_id": task.id}), 202
-        # scraper = LinkedInScraper(url,feed,total,cookie_file)
-        # load_result = scraper.load()
-        # if load_result.get("status") == "success":
-        #     print(load_result.get("message"))
-        #     search_feed_result = scraper.search_feed()
-        #     if search_feed_result.get("status") == "success":
-        #         print(search_feed_result.get("message"))
-        #         search_by_posts_result = scraper.search_by_posts()
-        #         if search_by_posts_result.get("status") == 'success':
-        #             print(search_by_posts_result.get("message"))
-        #             click_date_posted_result = scraper.click_date_posted()
-        #             if click_date_posted_result.get("status") == 'success':
-        #                 print(click_date_posted_result.get("message"))
-        #                 get_data_result = scraper.get_data()
-        #                 if get_data_result.get("status") == 'success':
-        #                     #print(get_data_result.get("message"))
-        #                     return jsonify({"status":"success","message":get_data_result.get("message")})
-        #             else:
-        #                 return jsonify({"status":"failure","message":click_date_posted_result.get("message")})
-        #         else:
-        #             return jsonify({"status":"failure","message":search_by_posts_result.get("message")})
-        #     else:
-        #         return jsonify({"status":"failure","message":search_feed_result.get("message")})    
-        # else:
-        #     return jsonify({"status":"failure","message": load_result.get("message")})
-        # scraper.close()
 
     except Exception as e:
         return jsonify({"status": "failure", "message": str(e)})
@@ -62,7 +36,44 @@ def scrape_data():
 @app.route("/status/<task_id>")
 def status(task_id):
     task = celery.AsyncResult(task_id)
-    return {"task_id": task.id, "state": task.state}
+
+    if task.state == "PENDING":
+        response = {
+            "task_id": task.id,
+            "state": task.state,
+            "status": "pending",
+            "message": "Task is still waiting in the queue..."
+        }
+    elif task.state == "STARTED":
+        response = {
+            "task_id": task.id,
+            "state": task.state,
+            "status": "running",
+            "message": "Task is currently being processed..."
+        }
+    elif task.state == "SUCCESS":
+        # Here, task.result will contain your return value
+        response = {
+            "task_id": task.id,
+            "state": task.state,
+            **task.result  # merges {"status": "...", "message": "..."}
+        }
+    elif task.state == "FAILURE":
+        response = {
+            "task_id": task.id,
+            "state": task.state,
+            "status": "failure",
+            "message": str(task.info)  # exception info
+        }
+    else:
+        response = {
+            "task_id": task.id,
+            "state": task.state,
+            "status": "unknown",
+            "message": str(task.info)
+        }
+
+    return jsonify(response)
 
 
 if __name__ == "__main__":
